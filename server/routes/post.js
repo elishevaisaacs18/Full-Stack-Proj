@@ -4,9 +4,14 @@ const {
   getAllItems,
   deleteItem,
   getItemByAttribute,
+  updateItem,
 } = require("../DB-requests/DB-requests");
 
 var router = express.Router();
+
+router.put("/:id", async function (req, res) {
+  res.send(await updateItem("post", req.body));
+});
 
 const schema = Joi.object({
   user_id: Joi.required(),
