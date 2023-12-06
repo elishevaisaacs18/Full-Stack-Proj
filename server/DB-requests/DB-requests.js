@@ -22,7 +22,6 @@ const deleteItem = async (tableName, id) => {
     if (data.affectedRows == 0) {
       throw new Error("Error deleting Comment");
     }
-    console.log(data, "im dava");
     return comment[0];
   } catch (e) {
     return e.message;
@@ -56,12 +55,11 @@ const loginUser = async (userLogin) => {
   }
 };
 
-const updateItem = async (tableName, updateItem) => {
+const updateItem = async (tableName, updateItem, id) => {
   try {
-    const response = await updateItemByAttributeInDB(tableName, updateItem);
+    const response = await updateItemByAttributeInDB(tableName, updateItem, id);
     if (response.affectedRows == 1) {
-      console.log("hii");
-      return await getItemByAttribute(tableName, updateItem.id, "id");
+      return await getItemByAttribute(tableName, id, "id");
     } else return response;
   } catch (e) {
     return e.message;

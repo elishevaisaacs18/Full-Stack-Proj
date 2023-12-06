@@ -17,7 +17,6 @@ const Nav = ({ setShowPost, setShowAlbum }) => {
     async function getUserName() {
       const currUserId = localStorage.getItem("currentUser");
       const user = await fetchData(`http://localhost:3000/user/${currUserId}`);
-      console.log('user: ', user)
       setNameOfUser(user[0].full_name);
     }
     getUserName();

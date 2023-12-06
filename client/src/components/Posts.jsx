@@ -4,7 +4,7 @@ import { Outlet, useParams, useNavigate } from "react-router-dom";
 import FilterNav from "./FilterNav";
 import UpdDelBtns from "./UpdDelBtns";
 
-const Posts = ({ showPost, setShowPost }) => {
+const Posts = ({ showPost, setShowPost, sendRequestToDb }) => {
   const [posts, setPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -21,10 +21,10 @@ const Posts = ({ showPost, setShowPost }) => {
         let data;
         postId
           ? (data = await fetchData(
-              `http://localhost:3000/posts?id=${postId}${serchParams}`
+              `http://localhost:3000/post/${postId}?${serchParams}`
             ))
           : (data = await fetchData(
-              `http://localhost:3000/posts?userId=${id}${serchParams}`
+              `http://localhost:3000/user/post?userId=${id}${serchParams}`
             ));
         if (!(data.length > 0)) throw new Error("not found");
         setPosts(data);
@@ -42,30 +42,20 @@ const Posts = ({ showPost, setShowPost }) => {
     const newPostObj = getAddPostContent();
     const responsePost = await sendRequestToDb(
       "POST",
-      `http://localhost:3000/posts/`,
+      `http://localhost:3000/post/`,
       newPostObj
     );
 
     setPosts((prevPosts) => [...prevPosts, responsePost]);
   }
 
-  async function sendRequestToDb(requestType, url, body) {
-    const response = await fetchData(url, {
-      method: requestType,
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(body),
-    });
-    return response;
-  }
   function getAddPostContent() {
     const postTitle = prompt("please enter your post title");
     const postBody = prompt("please enter your post body");
     const newPost = {
       title: postTitle,
       body: postBody,
-      userId: id,
+      user_id: id,
     };
     return newPost;
   }
@@ -93,7 +83,7 @@ const Posts = ({ showPost, setShowPost }) => {
           </button>
           <UpdDelBtns
             contentId={post.id}
-            contentUrl={`http://localhost:3000/posts/${post.id}`}
+            contentUrl={`http://localhost:3000/post/${post.id}`}
             setContent={setPosts}
             getPostData={getAddPostContent}
             sendRequestToDb={sendRequestToDb}

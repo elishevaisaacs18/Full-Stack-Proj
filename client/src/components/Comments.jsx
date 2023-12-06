@@ -3,7 +3,7 @@ import useFetch from "../assets/customHooks/useFetch";
 import { useParams } from "react-router-dom";
 import UpdDelBtns from "./UpdDelBtns";
 
-const Comments = () => {
+const Comments = ({sendRequestToDb}) => {
   const [comments, setComments] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -41,16 +41,6 @@ const Comments = () => {
     setComments((prevComments) => [...prevComments, responseComments]);
   }
 
-  async function sendRequestToDb(requestType, url, body) {
-    const response = await fetchData(url, {
-      method: requestType,
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(body),
-    });
-    return response;
-  }
   function getAddCommentsContent() {
     const commentName = prompt("please enter your comment name");
     const commentBody = prompt("please enter your comment body");

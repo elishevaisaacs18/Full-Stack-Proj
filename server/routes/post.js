@@ -5,12 +5,14 @@ const {
   deleteItem,
   getItemByAttribute,
   updateItem,
+  postItem,
 } = require("../DB-requests/DB-requests");
 
 var router = express.Router();
 
 router.put("/:id", async function (req, res) {
-  res.send(await updateItem("post", req.body));
+  console.log("req.query.id: ", req.params.id);
+  res.send(await updateItem("post", req.body, req.params.id));
 });
 
 const schema = Joi.object({
@@ -20,6 +22,11 @@ const schema = Joi.object({
 });
 router.get("/", async function (req, res) {
   res.send(await getAllItems("post"));
+});
+router.get("/:id", async function (req, res) {
+  const postId = req.params.id;
+  console.log("postId: ", postId);
+  res.send(await getItemByAttribute("post", postId, "id"));
 });
 
 router.post("/", async function (req, res) {

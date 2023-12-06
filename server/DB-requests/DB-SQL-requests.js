@@ -44,7 +44,7 @@ const loginUserInDB = async (userLogin) =>
     ON user_password.user_id = user.id
     WHERE user_name = '${userLogin.user_name}' AND password = '${userLogin.password}';`);
 
-const updateItemByAttributeInDB = async (tableName, updateItem) => {
+const updateItemByAttributeInDB = async (tableName, updateItem, id) => {
   let rowChange = "";
   const fields = Object.keys(updateItem);
   const length = fields.length;
@@ -58,8 +58,9 @@ const updateItemByAttributeInDB = async (tableName, updateItem) => {
       rowChange += ",";
     }
   });
+
   return await executeQuery(
-    `UPDATE ${tableName} SET ${rowChange} WHERE id = ${updateItem.id};`
+    `UPDATE ${tableName} SET ${rowChange} WHERE id = ${id};`
   );
 };
 

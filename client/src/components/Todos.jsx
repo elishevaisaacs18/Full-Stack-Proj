@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import FilterNav from "./FilterNav";
 import UpdDelBtns from "./UpdDelBtns";
 
-const Todos = () => {
+const Todos = ({sendRequestToDb}) => {
   const [todos, setTodos] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -41,17 +41,6 @@ const Todos = () => {
     );
 
     setTodos((prevToDos) => [...prevToDos, responseToDo]);
-  }
-
-  async function sendRequestToDb(requestType, url, body) {
-    const response = await fetchData(url, {
-      method: requestType,
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(body),
-    });
-    return response;
   }
 
   function getAddToDoContent() {
