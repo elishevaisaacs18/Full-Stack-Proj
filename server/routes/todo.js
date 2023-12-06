@@ -15,8 +15,8 @@ const schema = Joi.object({
   title: Joi.required(),
 });
 
-router.put("/:id", async function (req, res) {
-  res.send(await updateItem("todo", req.body));
+router.patch("/:id", async function (req, res) {
+  res.send(await updateItem("todo", req.body, req.params.id));
 });
 
 router.get("/", async function (req, res) {

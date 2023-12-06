@@ -17,7 +17,7 @@ const schema = Joi.object({
   title: Joi.required(),
 });
 
-router.put("/:id", async function (req, res) {
+router.patch("/:id", async function (req, res) {
   console.log("res.body: ", req.body);
   res.send(await updateItem("comment", req.body));
 });

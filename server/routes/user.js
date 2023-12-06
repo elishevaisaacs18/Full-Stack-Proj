@@ -25,9 +25,15 @@ router.get("/", async function (req, res) {
 });
 
 router.get("/post", async function (req, res) {
-  const userId = req.query.userId;
+  const userId = req.query.user_id;
   console.log("userId: ", userId);
   res.send(await getItemByAttribute("post", userId, "user_id"));
+});
+
+router.get("/todo", async function (req, res) {
+  const userId = req.query.user_id;
+  console.log("userId: ", userId);
+  res.send(await getItemByAttribute("todo", userId, "user_id"));
 });
 
 router.get("/:id", async function (req, res) {
