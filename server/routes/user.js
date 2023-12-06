@@ -1,26 +1,49 @@
 const express = require("express");
 const Joi = require("joi");
-const executeQuery = require("../../DB/dbUtils").executeQuery;
+const {
+  getAllItems,
+  getItemByAttribute,
+  deleteItem,
+  loginUser
+} = require("../DB-requests/DB-requests");
+const { getItemByAttributeFromDB } = require("../DB-requests/DB-SQL-requests");
 var router = express.Router();
 
-// const schema = Joi.object({
-//   user_name: Joi.string().alphanum().min(3).max(30).required(),
-//   school_code: Joi.number().integer().min(0).max(10000).required(),
-// });
+const schema = Joi.object({
+  user_name: Joi.required(),
+  full_name: Joi.required(),
+});
 
-// router.post("/", async function (req, res) {
-//   const { error } = schema.validate(req.body);
-//   if (error) {
-//     console.log(error);
-//     return res.status(400).send("Bad Schema");
-//   }
-//   const addUserQuery = `INSERT INTO user (school_name, school_code)
-//     VALUES ('${req.body.school_name}' , '${req.body.school_code}')`;
-//   try {
-//     const data = await executeQuery(addSchoolQuery);
-//     res.send(data);
-//     console.log(data);
-//   } catch {
-//     res.send("Error Adding School");
-//   }
-// });
+const loginSchema = Joi.object({
+  user_name: Joi.required(),
+  password: Joi.required(),
+});
+
+router.get("/", async function (req, res) {
+  res.send(await getAllItems("user"));
+});
+
+router.post("/", async function (req, res) {
+  const { error } = schema.validate(req.body);
+  if (error) {
+    console.log(error);
+    return res.status(400).send("Bad Schema");
+  }
+  res.send(await postItem("user", req.body));
+});
+
+router.delete("/:id", async function (req, res) {
+  const id = req.params.id;
+  res.send(await deleteItem("user", id));
+});
+
+router.post("/login", async function (req, res) {
+  const { error } = loginSchema.validate(req.body);
+  if (error) {
+    console.log(error);
+    return res.status(400).send("Bad Schema");
+  }
+  res.send(await loginUser(req.body));
+});
+
+module.exports = router;
