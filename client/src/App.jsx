@@ -12,7 +12,7 @@ import Albums from "./pages/albums/Albums";
 import Photo from "./pages/albums/Photo";
 import Posts from "./pages/posts/Posts";
 import ViewPost from "./pages/posts/ViewPost";
-import Todo from "./pages/todos/Todos";
+import Todos from "./pages/todos/Todos";
 
 function App() {
   useEffect(() => {}, []);
@@ -30,10 +30,10 @@ function App() {
               <Route index element={<Posts />} />
               <Route path=":id" element={<ViewPost />} />
             </Route>
-            <Route path="albums" element={<Albums />}>
+            {/* <Route path="albums" element={<Albums />}>
               <Route index element={<></>} />
               <Route path=":id" element={<></>}></Route>
-            </Route>
+            </Route> */}
             <Route path="photo/:id" element={<Photo />} />
             <Route path="todos" element={<Todos />} />
           </Route>
