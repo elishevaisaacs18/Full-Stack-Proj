@@ -1,47 +1,59 @@
-import "./App.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useEffect } from "react";
-// import ressetDB from "./resetDB";
-import { UserProvider } from "./context/UserContext";
-import Login from "./pages/user/login";
-import Register from "./pages/user/Register";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import Layout from "./components/Layout";
 import Home from "./components/Home";
-import Profile from "./pages/user/Profile";
-import Header from "./components/Header";
-import Albums from "./pages/albums/Albums";
-import Photo from "./pages/albums/Photo";
-import Posts from "./pages/posts/Posts";
-import ViewPost from "./pages/posts/ViewPost";
-import Todo from "./pages/todos/Todos";
+import Info from "./components/Info";
+import Posts from "./components/Posts";
+import Comments from "./components/Comments";
+import Todos from "./components/Todos";
+import NotFound from "./components/NotFound";
+import Login from "./components/Login";
+import Register from "./components/Register";
+import { useState } from "react";
+import useFetch from "./assets/customHooks/useFetch";
 
-function App() {
-  useEffect(() => {}, []);
+const App = () => {
+  const [showPost, setShowPost] = useState(false);
+  const fetchData = useFetch;
+  async function sendRequestToDb(requestType, url, body) {
+    const response = await fetchData(url, {
+      method: requestType,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    });
+    return response;
+  }
 
   return (
     <BrowserRouter>
-      <UserProvider>
-        <Routes>
-          <Route index element={<Login />} />
-          <Route path="register" element={<Register />} />
-          <Route path="/*" element={<Header />}>
-            <Route path="home" element={<Home />} />
-            <Route path="profile" element={<Profile />} />
-            <Route path="posts">
-              <Route index element={<Posts />} />
-              <Route path=":id" element={<ViewPost />} />
+      <Routes>
+        <Route index element={<Navigate to="/login"></Navigate>} />
+        <Route
+          path="/login"
+          element={<Login sendRequestToDb={sendRequestToDb} />}
+        />
+        <Route path="/register" element={<Register />} />
+        <Route element={<Layout setShowPost={setShowPost} />}>
+          <Route path="/home/:id" element={<Home />}>
+            <Route path="info/" element={<Info />} />
+            <Route
+              path="posts/"
+              element={<Posts showPost={showPost} setShowPost={setShowPost} />}
+            />
+            <Route
+              path="posts/:postId"
+              element={<Posts showPost={showPost} setShowPost={setShowPost} />}
+            >
+              <Route path="comments" element={<Comments />} />
             </Route>
-            <Route path="albums" element={<Albums />}>
-              <Route index element={<></>} />
-              <Route path=":id" element={<></>}></Route>
-            </Route>
-            <Route path="photo/:id" element={<Photo />} />
-            <Route path="todos" element={<Todos />} />
+            <Route path="todos/" element={<Todos />} />
           </Route>
-          <Route path="/:page" element={<h1>page not found...</h1>} />
-        </Routes>
-      </UserProvider>
+        </Route>
+        <Route path="*" element={<NotFound />} />
+      </Routes>
     </BrowserRouter>
   );
-}
+};
 
 export default App;
