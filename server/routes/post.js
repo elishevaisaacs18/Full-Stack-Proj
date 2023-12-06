@@ -30,4 +30,19 @@ router.post("/", async function (req, res) {
   }
 });
 
+router.get("/", async function (req, res) {
+  const getAllPost = `SELECT * FROM post;`;
+  try {
+    const data = await executeQuery(getAllPost);
+    console.log("data: ", data);
+    res.send({
+      data,
+    });
+  } catch {
+    res.send("Error Adding School");
+  }
+});
+
+module.exports = router;
+
 module.exports = router;

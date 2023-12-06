@@ -20,7 +20,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/", homeRouter);
 // app.use("/user", userRouter);
 app.use("/post", postRouter);
-// app.use("/comment", commentRouter);
-// app.use("/todo", todoRouter);
+app.use("/comment", commentRouter);
+app.use("/todo", todoRouter);
 
 module.exports = app;
