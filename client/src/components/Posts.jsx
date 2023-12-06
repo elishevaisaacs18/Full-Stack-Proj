@@ -16,6 +16,7 @@ const Posts = ({ showPost, setShowPost, sendRequestToDb }) => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
+        console.log("hi")
         setIsLoading(true);
         setError(false);
         let data;
