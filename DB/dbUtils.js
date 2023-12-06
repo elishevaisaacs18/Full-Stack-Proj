@@ -15,7 +15,6 @@ function executeQuery(sql, values = []) {
         throw new Error(err);
       } else {
         resolve(result);
-        console.log('result: ', result)
         console.log("success");
       }
     });

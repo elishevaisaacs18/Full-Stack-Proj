@@ -26,7 +26,21 @@ router.post("/", async function (req, res) {
       body: req.body.body,
     });
   } catch {
-    res.send("Error Adding School");
+    res.send("Error Adding Post");
+  }
+});
+
+router.delete("/:id", async function (req, res) {
+  const id = req.params.id;
+  const deletePostQuery = `DELETE FROM post WHERE id = ${id};`;
+  try {
+    const post = await executeQuery(`SELECT * FROM post WHERE id=${id}`);
+    const data = await executeQuery(deletePostQuery);
+
+    console.log(data);
+    res.send(post[0]);
+  } catch {
+    res.send("Error Adding Post");
   }
 });
 
