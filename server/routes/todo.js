@@ -2,7 +2,7 @@ const express = require("express");
 const Joi = require("joi");
 const {
   getAllItems,
-  getItemById,
+  getItemByAttribute,
   deleteItem,
 } = require("../DB-requests/DB-requests");
 

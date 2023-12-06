@@ -3,7 +3,7 @@ const Joi = require("joi");
 const {
   getAllItems,
   deleteItem,
-  getItemById,
+  getItemByAttribute,
 } = require("../DB-requests/DB-requests");
 
 var router = express.Router();

@@ -1,10 +1,14 @@
 const executeQuery = require("../../DB/dbUtils").executeQuery;
-const getItemByIdFromDB = async (tableName, id) =>
-  await executeQuery(`SELECT * FROM ${tableName} WHERE id=${id}`);
+
+const getItemByAttributeFromDB = async (tableName, id, attribute) =>
+  await executeQuery(`SELECT * FROM ${tableName} WHERE ${attribute}=${id}`);
+
 const getAllItemsFromDB = async (tableName) =>
   await executeQuery(`SELECT * FROM ${tableName}`);
+
 const deleteItemFromDB = async (tableName, id) =>
   await executeQuery(`DELETE FROM ${tableName} WHERE id = ${id};`);
+
 const postItemInDB = async (tableName, body) => {
   let valuesSQL = "";
   let fieldSQL = "";
@@ -30,9 +34,18 @@ const postItemInDB = async (tableName, body) => {
     id: data.insertId,
   };
 };
+
+const loginUserInDB = async (userLogin) =>
+  await executeQuery(`SELECT user.id, user_name, full_name
+    FROM user
+    JOIN user_password
+    ON user_password.user_id = user.id
+    WHERE user_name = '${userLogin.user_name}' AND password = '${userLogin.password}';`);
+
 module.exports = {
   getAllItemsFromDB,
-  getItemByIdFromDB,
+  getItemByAttributeFromDB,
   deleteItemFromDB,
   postItemInDB,
+  loginUserInDB,
 };

@@ -1,14 +1,14 @@
 const {
   getAllItemsFromDB,
-  getItemByIdFromDB,
+  getItemByAttributeFromDB,
   deleteItemFromDB,
   postItemInDB,
+  loginUserInDB,
 } = require("./DB-SQL-requests");
 
 const getAllItems = async (tableName) => {
   try {
-    const data = await getAllItemsFromDB(tableName);
-    return data;
+    return await getAllItemsFromDB(tableName);
   } catch {
     return "Error Getting Items";
   }
@@ -16,7 +16,7 @@ const getAllItems = async (tableName) => {
 
 const deleteItem = async (tableName, id) => {
   try {
-    const comment = await getItemById(tableName, id);
+    const comment = await getItemByAttribute(tableName, id, "id");
     const data = await deleteItemFromDB(tableName, id);
     if (data.affectedRows == 0) {
       throw new Error("Error deleting Comment");
@@ -28,9 +28,9 @@ const deleteItem = async (tableName, id) => {
   }
 };
 
-const getItemById = async (tableName, id) => {
+const getItemByAttribute = async (tableName, id) => {
   try {
-    const data = await getItemByIdFromDB(tableName, id);
+    const data = await getItemByAttributeFromDB(tableName, id, "id");
     return data;
   } catch {
     return "Error Getting Item";
@@ -45,4 +45,20 @@ const postItem = async (tableName, body) => {
   }
 };
 
-module.exports = { getAllItems, getItemById, deleteItem, postItem };
+const loginUser = async (userLogin) => {
+  try {
+    const user = await loginUserInDB(userLogin);
+    if (user.length) return user;
+    else throw new Error("Your user name or password is incorrect");
+  } catch (e) {
+    return e.message;
+  }
+};
+
+module.exports = {
+  getAllItems,
+  getItemByAttribute,
+  deleteItem,
+  postItem,
+  loginUser,
+};
