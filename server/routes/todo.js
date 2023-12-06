@@ -1,25 +1,21 @@
 const express = require("express");
 const Joi = require("joi");
-const executeQuery = require("../../DB/dbUtils").executeQuery;
+const {
+  getAllItems,
+  getItemById,
+  deleteItem,
+} = require("../DB-requests/DB-requests");
+
 var router = express.Router();
 
 const schema = Joi.object({
-  userId: Joi.required(),
+  user_id: Joi.required(),
   completed: Joi.required(),
   title: Joi.required(),
 });
 
 router.get("/", async function (req, res) {
-  const getAllTodo = `SELECT * FROM todo;`;
-  try {
-    const data = await executeQuery(getAllTodo);
-    console.log("data: ", data);
-    res.send({
-      data,
-    });
-  } catch {
-    res.send("Error Adding School");
-  }
+  res.send(await getAllItems("todo"));
 });
 
 router.post("/", async function (req, res) {
@@ -28,33 +24,12 @@ router.post("/", async function (req, res) {
     console.log(error);
     return res.status(400).send("Bad Schema");
   }
-  const addPostQuery = `INSERT INTO todo (post_id, user_id, title, body)
-    VALUES ('${req.body.userId}' , '${req.body.title}', '${req.body.completed}')`;
-  try {
-    const data = await executeQuery(addPostQuery);
-    res.send({
-      id: data.insertId,
-      userId: req.body.userId,
-      title: req.body.title,
-      completed: req.body.completed,
-    });
-  } catch {
-    res.send("Error Adding Todo");
-  }
+  res.send(await postItem("todo", req.body));
 });
 
 router.delete("/:id", async function (req, res) {
   const id = req.params.id;
-  const deleteTodoQuery = `DELETE FROM todo WHERE id = ${id};`;
-  try {
-    const todo = await executeQuery(`SELECT * FROM todo WHERE id=${id}`);
-    const data = await executeQuery(deleteTodoQuery);
-
-    console.log(data);
-    res.send(todo[0]);
-  } catch {
-    res.send("Error Adding Todo");
-  }
+  res.send(await deleteItem("todo", id));
 });
 
 module.exports = router;

@@ -1,62 +1,33 @@
 const express = require("express");
 const Joi = require("joi");
 const executeQuery = require("../../DB/dbUtils").executeQuery;
+const { getAllItems, deleteItem, postItem } = require("../DB-requests/DB-requests");
+
 var router = express.Router();
 
 const schema = Joi.object({
-  postId: Joi.required(),
-  userId: Joi.required(),
+  post_id: Joi.required(),
+  user_id: Joi.required(),
   body: Joi.required(),
   title: Joi.required(),
 });
 
 router.get("/", async function (req, res) {
-  const getAllComment = `SELECT * FROM comment;`;
-  try {
-    const data = await executeQuery(getAllComment);
-    console.log("data: ", data);
-    res.send({
-      data,
-    });
-  } catch {
-    res.send("Error Adding School");
-  }
+  res.send(await getAllItems("comment"));
 });
 
 router.post("/", async function (req, res) {
-  const { error } = schema.validate(req.body);
-  if (error) {
-    console.log(error);
-    return res.status(400).send("Bad Schema");
-  }
-  const addCommentQuery = `INSERT INTO comment (post_id, user_id, title, body)
-    VALUES ('${req.body.postId}' , '${req.body.userId}' , '${req.body.title}', '${req.body.body}')`;
-  try {
-    const data = await executeQuery(addCommentQuery);
-    res.send({
-      id: data.insertId,
-      postId: req.body.postId,
-      userId: req.body.userId,
-      title: req.body.title,
-      body: req.body.body,
-    });
-  } catch {
-    res.send("Error Adding Comment");
-  }
+const { error } = schema.validate(req.body);
+if (error) {
+  console.log(error);
+  return res.status(400).send("Bad Schema");
+}
+res.send(await postItem("comment", req.body));
 });
 
 router.delete("/:id", async function (req, res) {
   const id = req.params.id;
-  const deleteCommentQuery = `DELETE FROM comment WHERE id = ${id};`;
-  try {
-    const comment = await executeQuery(`SELECT * FROM comment WHERE id=${id}`);
-    const data = await executeQuery(deleteCommentQuery);
-
-    console.log(data);
-    res.send(comment[0]);
-  } catch {
-    res.send("Error Adding Comment");
-  }
+  res.send(await deleteItem("comment", id));
 });
 
 module.exports = router;
