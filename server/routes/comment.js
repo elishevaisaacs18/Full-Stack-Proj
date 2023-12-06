@@ -6,6 +6,7 @@ const {
   deleteItem,
   postItem,
   updateItem,
+  getFilterItems,
 } = require("../DB-requests/DB-requests");
 
 var router = express.Router();
@@ -23,8 +24,19 @@ router.put("/:id", async function (req, res) {
 });
 
 router.get("/", async function (req, res) {
-  res.send(await getAllItems("comment"));
+  const conditions = req.query; // Assuming you're looking for a query parameter named "type"
+  console.log("conditions11: ", conditions);
+  if (JSON.stringify(conditions) === "{}") {
+    console.log("ressdfaw1");
+    res.send(await getAllItems("comment"));
+  } else {
+    res.send(await getFilterItems("comment", conditions));
+  }
 });
+
+// router.get("/", async function (req, res) {
+//   res.send(await getAllItems("comment"));
+// });
 
 router.post("/", async function (req, res) {
   console.log("req.bod: ", req.body);

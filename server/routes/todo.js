@@ -4,6 +4,7 @@ const {
   getAllItems,
   getItemByAttribute,
   deleteItem,
+  getFilterItems,
   updateItem,
 } = require("../DB-requests/DB-requests");
 
@@ -20,7 +21,14 @@ router.put("/:id", async function (req, res) {
 });
 
 router.get("/", async function (req, res) {
-  res.send(await getAllItems("todo"));
+  const conditions = req.query; // Assuming you're looking for a query parameter named "type"
+  console.log("conditions11: ", conditions);
+  if (JSON.stringify(conditions) === "{}") {
+    console.log("ressdfaw1");
+    res.send(await getAllItems("todo"));
+  } else {
+    res.send(await getFilterItems("todo", conditions));
+  }
 });
 
 router.post("/", async function (req, res) {

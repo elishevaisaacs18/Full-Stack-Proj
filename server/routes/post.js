@@ -5,9 +5,21 @@ const {
   deleteItem,
   getItemByAttribute,
   updateItem,
+  getFilterItems,
 } = require("../DB-requests/DB-requests");
 
 var router = express.Router();
+
+router.get("/", async function (req, res) {
+  const conditions = req.query; // Assuming you're looking for a query parameter named "type"
+  console.log("conditions11: ", conditions);
+  if (JSON.stringify(conditions) === "{}") {
+    console.log("ressdfaw1");
+    res.send(await getAllItems("post"));
+  } else {
+    res.send(await getFilterItems("post", conditions));
+  }
+});
 
 router.put("/:id", async function (req, res) {
   res.send(await updateItem("post", req.body));
@@ -17,9 +29,6 @@ const schema = Joi.object({
   user_id: Joi.required(),
   title: Joi.required(),
   body: Joi.required(),
-});
-router.get("/", async function (req, res) {
-  res.send(await getAllItems("post"));
 });
 
 router.post("/", async function (req, res) {

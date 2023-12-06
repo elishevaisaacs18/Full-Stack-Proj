@@ -1,12 +1,22 @@
-const { getItemByAttribute } = require("./DB-requests");
+const { query } = require("express");
+// const { getItemByAttribute } = require("./DB-requests");
 
 const executeQuery = require("../../DB/dbUtils").executeQuery;
 
-const getItemByAttributeFromDB = async (tableName, id, attribute) =>
-  await executeQuery(`SELECT * FROM ${tableName} WHERE ${attribute}=${id}`);
+const getItemByAttributeFromDB = async (tableName, id, attribute) => {
+  console.log(
+    "`SELECT * FROM ${tableName} WHERE ${attribute}=${id}`: ",
+    `SELECT * FROM ${tableName} WHERE ${attribute}=${id};`
+  );
+  return await executeQuery(
+    `SELECT * FROM ${tableName} WHERE ${attribute}=${id};`
+  );
+};
 
-const getAllItemsFromDB = async (tableName) =>
-  await executeQuery(`SELECT * FROM ${tableName}`);
+const getAllItemsFromDB = async (tableName) => {
+  console.log("`SELECT * FROM ${tableName}`: ", `SELECT * FROM ${tableName}`);
+  return await executeQuery(`SELECT * FROM full_stack_proj.${tableName}`);
+};
 
 const deleteItemFromDB = async (tableName, id) =>
   await executeQuery(`DELETE FROM ${tableName} WHERE id = ${id};`);
@@ -63,6 +73,32 @@ const updateItemByAttributeInDB = async (tableName, updateItem) => {
   );
 };
 
+const getFilterItemsFromDB = async (tableName, conditionsObj) => {
+  // console.log("conditionsObj: ", conditionsObj);
+  let conditionsSql = "";
+  const conditions = Object.keys(conditionsObj);
+  const length = conditions.length;
+  conditions.forEach((condition, index) => {
+    conditionsSql += `${condition} = `;
+    const value = conditionsObj[condition];
+    if (typeof value === "string") conditionsSql += `"${value}"`;
+    else conditionsSql += value;
+
+    if (index != length - 1) {
+      conditionsSql += " AND ";
+    }
+  });
+  // console.log(
+  //   "` SELECT *FROM ${tableName} WHERE ${conditionsSql}`: ",
+  //   ` SELECT *FROM ${tableName} WHERE ${conditionsSql}`
+  // );
+  const res = await executeQuery(
+    ` SELECT *FROM ${tableName} WHERE ${conditionsSql}`
+  );
+  console.log("res: ", res);
+  return res;
+};
+
 module.exports = {
   getAllItemsFromDB,
   getItemByAttributeFromDB,
@@ -70,4 +106,5 @@ module.exports = {
   postItemInDB,
   loginUserInDB,
   updateItemByAttributeInDB,
+  getFilterItemsFromDB,
 };

@@ -5,11 +5,14 @@ const {
   postItemInDB,
   loginUserInDB,
   updateItemByAttributeInDB,
+  getFilterItemsFromDB,
 } = require("./DB-SQL-requests");
 
 const getAllItems = async (tableName) => {
   try {
-    return await getAllItemsFromDB(tableName);
+    const res = await getAllItemsFromDB(tableName);
+    console.log("res: ", res);
+    return res;
   } catch {
     return "Error Getting Items";
   }
@@ -68,6 +71,14 @@ const updateItem = async (tableName, updateItem) => {
   }
 };
 
+const getFilterItems = async (tableName, conditions) => {
+  try {
+    return await getFilterItemsFromDB(tableName, conditions);
+  } catch (e) {
+    return e.message;
+  }
+};
+
 module.exports = {
   getAllItems,
   getItemByAttribute,
@@ -75,4 +86,5 @@ module.exports = {
   postItem,
   loginUser,
   updateItem,
+  getFilterItems,
 };
