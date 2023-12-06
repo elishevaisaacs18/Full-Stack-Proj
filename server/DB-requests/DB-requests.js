@@ -4,6 +4,7 @@ const {
   deleteItemFromDB,
   postItemInDB,
   loginUserInDB,
+  updateItemByAttributeInDB,
 } = require("./DB-SQL-requests");
 
 const getAllItems = async (tableName) => {
@@ -28,9 +29,9 @@ const deleteItem = async (tableName, id) => {
   }
 };
 
-const getItemByAttribute = async (tableName, id) => {
+const getItemByAttribute = async (tableName, id, attribute) => {
   try {
-    const data = await getItemByAttributeFromDB(tableName, id, "id");
+    const data = await getItemByAttributeFromDB(tableName, id, attribute);
     return data;
   } catch {
     return "Error Getting Item";
@@ -55,10 +56,23 @@ const loginUser = async (userLogin) => {
   }
 };
 
+const updateItem = async (tableName, updateItem) => {
+  try {
+    const response = await updateItemByAttributeInDB(tableName, updateItem);
+    if (response.affectedRows == 1) {
+      console.log("hii");
+      return await getItemByAttribute(tableName, updateItem.id, "id");
+    } else return response;
+  } catch (e) {
+    return e.message;
+  }
+};
+
 module.exports = {
   getAllItems,
   getItemByAttribute,
   deleteItem,
   postItem,
   loginUser,
+  updateItem,
 };

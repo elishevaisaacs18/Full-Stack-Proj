@@ -1,3 +1,5 @@
+const { getItemByAttribute } = require("./DB-requests");
+
 const executeQuery = require("../../DB/dbUtils").executeQuery;
 
 const getItemByAttributeFromDB = async (tableName, id, attribute) =>
@@ -42,10 +44,30 @@ const loginUserInDB = async (userLogin) =>
     ON user_password.user_id = user.id
     WHERE user_name = '${userLogin.user_name}' AND password = '${userLogin.password}';`);
 
+const updateItemByAttributeInDB = async (tableName, updateItem) => {
+  let rowChange = "";
+  const fields = Object.keys(updateItem);
+  const length = fields.length;
+  fields.forEach((field, index) => {
+    rowChange += `${field} = `;
+    const value = updateItem[field];
+    if (typeof value === "string") rowChange += `"${value}"`;
+    else rowChange += value;
+
+    if (index != length - 1) {
+      rowChange += ",";
+    }
+  });
+  return await executeQuery(
+    `UPDATE ${tableName} SET ${rowChange} WHERE id = ${updateItem.id};`
+  );
+};
+
 module.exports = {
   getAllItemsFromDB,
   getItemByAttributeFromDB,
   deleteItemFromDB,
   postItemInDB,
   loginUserInDB,
+  updateItemByAttributeInDB,
 };
