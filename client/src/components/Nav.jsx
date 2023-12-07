@@ -10,7 +10,12 @@ const Nav = ({ setShowPost, setShowAlbum }) => {
 
   function logout() {
     localStorage.setItem("currentUser", "");
+    clearBrowserHistory();
     navigate(`/login`);
+  }
+
+  function clearBrowserHistory() {
+    window.history.replaceState(null, null, '/');
   }
 
   useEffect(() => {
