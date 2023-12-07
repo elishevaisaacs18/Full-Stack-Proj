@@ -5,6 +5,7 @@ const {
   getItemByAttribute,
   deleteItem,
   loginUser,
+  getUserPosts,
 } = require("../DB-requests/DB-requests");
 const { getItemByAttributeFromDB } = require("../DB-requests/DB-SQL-requests");
 var router = express.Router();
@@ -21,6 +22,12 @@ const loginSchema = Joi.object({
 
 router.get("/", async function (req, res) {
   res.send(await getAllItems("user"));
+});
+
+router.get("/post", async function (req, res) {
+  const userId = req.query.userId;
+  console.log("userId: ", userId);
+  res.send(await getItemByAttribute("post", userId, "user_id"));
 });
 
 router.get("/:id", async function (req, res) {

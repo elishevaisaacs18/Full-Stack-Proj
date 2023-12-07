@@ -20,15 +20,16 @@ const UpdDelBtns = ({
 
   async function changeContent() {
     const newContentObj = getPostData();
-    const response = await sendRequestToDb("PUT", contentUrl, newContentObj);
-    setContent((prev) => {
-      let newContent = [...prev];
-      const contentIndex = prev.findIndex(
-        (comment) => comment.id === response.id
-      );
-      newContent[contentIndex] = response;
-      return newContent;
-    });
+    try {
+      const response = await sendRequestToDb("PUT", contentUrl, newContentObj);
+      setContent((prev) => {
+        return prev.map((post) =>
+          post.id === response.id ? { ...post, ...response } : post
+        );
+      });
+    } catch (error) {
+      console.error("Error updating content:", error);
+    }
   }
 
   return (

@@ -39,15 +39,15 @@ const App = () => {
             <Route path="info/" element={<Info />} />
             <Route
               path="posts/"
-              element={<Posts showPost={showPost} setShowPost={setShowPost} />}
+              element={<Posts showPost={showPost} setShowPost={setShowPost} sendRequestToDb={sendRequestToDb} />}
             />
             <Route
               path="posts/:postId"
               element={<Posts showPost={showPost} setShowPost={setShowPost} />}
             >
-              <Route path="comments" element={<Comments />} />
+              <Route path="comments" element={<Comments sendRequestToDb={sendRequestToDb} />} />
             </Route>
-            <Route path="todos/" element={<Todos />} />
+            <Route path="todos/" element={<Todos sendRequestToDb={sendRequestToDb}/>} />
           </Route>
         </Route>
         <Route path="*" element={<NotFound />} />
