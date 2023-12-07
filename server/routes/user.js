@@ -10,6 +10,8 @@ const {
 const { getItemByAttributeFromDB } = require("../DB-requests/DB-SQL-requests");
 var router = express.Router();
 
+let loginTable = [{ user_name: "hani", access_token: 0, wrongPassword: [] }];
+
 const schema = Joi.object({
   user_name: Joi.required(),
   full_name: Joi.required(),
@@ -22,18 +24,6 @@ const loginSchema = Joi.object({
 
 router.get("/", async function (req, res) {
   res.send(await getAllItems("user"));
-});
-
-router.get("/post", async function (req, res) {
-  const userId = req.query.user_id;
-  console.log("userId: ", userId);
-  res.send(await getItemByAttribute("post", userId, "user_id"));
-});
-
-router.get("/todo", async function (req, res) {
-  const userId = req.query.user_id;
-  console.log("userId: ", userId);
-  res.send(await getItemByAttribute("todo", userId, "user_id"));
 });
 
 router.get("/:id", async function (req, res) {
@@ -56,12 +46,78 @@ router.delete("/:id", async function (req, res) {
 });
 
 router.post("/login", async function (req, res) {
+  let access_token = 0;
   const { error } = loginSchema.validate(req.body);
   if (error) {
     console.log(error);
     return res.status(400).send("Bad Schema");
   }
-  res.send(await loginUser(req.body));
+  console.log("loginTable: ", loginTable);
+  const userHistory = loginTable.filter((uh) => {
+    return uh.user_name === req.body.user_name;
+  });
+  console.log("userHistory: ", userHistory);
+  if (userHistory[0]?.wrongPassword?.length >= 3) {
+    res.send(
+      "There have been 3 incorrect login attempts in the last 10 seconds. Please wait 10 seconds"
+    );
+    return;
+  }
+  const user = await loginUser(req.body);
+  // loginTable.push(5);
+  // console.log(loginTable);
+  if (user[0].user_name) {
+    // console.log("god");
+    if (!userHistory[0]) {
+      loginTable.push({
+        user_name: user[0].user_name,
+        // access_token: Math.random(),
+      });
+    }
+    loginTable.forEach((uh) => {
+      if (uh.user_name === user[0].user_name) {
+        access_token = Math.random();
+        uh.access_token = access_token;
+      }
+      return uh;
+    });
+    setTimeout(() => {
+      loginTable.forEach((uh) => {
+        if (uh.user_name === user[0].user_name) {
+          uh.access_token = 0;
+        }
+        return uh;
+      });
+    }, 10000);
+  } else {
+    if (!userHistory[0]) {
+      loginTable.push({
+        user_name: req.body.user_name,
+        wrongPassword: [],
+      });
+    }
+    // console.log(8888);
+    loginTable.forEach((uh) => {
+      if (uh.user_name === req.body.user_name) {
+        uh.wrongPassword.push(1);
+      }
+      return uh;
+    });
+    setTimeout(() => {
+      loginTable.forEach((uh) => {
+        if (uh.user_name === req.body.user_name) {
+          uh.wrongPassword?.pop();
+        }
+        return uh;
+      });
+    }, 10000);
+  }
+
+  // console.log(loginTable);
+
+  res.send({ user: user, access_token: access_token });
+
+  // console.log("hii");
 });
 
 module.exports = router;
