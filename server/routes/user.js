@@ -9,8 +9,9 @@ const {
 } = require("../DB-requests/DB-requests");
 const { getItemByAttributeFromDB } = require("../DB-requests/DB-SQL-requests");
 var router = express.Router();
+const { loginTable } = require("../userAccess");
 
-let loginTable = [{ user_name: "hani", access_token: 0, wrongPassword: [] }];
+// let loginTable = [{ user_name: "hani", access_token: 0, wrongPassword: [] }];
 
 const schema = Joi.object({
   user_name: Joi.required(),
@@ -88,7 +89,7 @@ router.post("/login", async function (req, res) {
         }
         return uh;
       });
-    }, 10000);
+    }, 30000);
   } else {
     if (!userHistory[0]) {
       loginTable.push({
@@ -113,9 +114,10 @@ router.post("/login", async function (req, res) {
     }, 10000);
   }
 
-  // console.log(loginTable);
+  console.log(loginTable);
 
-  res.send({ user: user, access_token: access_token });
+  res.send(user);
+  // res.send({ user: user, access_token: access_token });
 
   // console.log("hii");
 });
