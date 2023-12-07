@@ -3,20 +3,23 @@ import useFetch from "../assets/customHooks/useFetch";
 import { useParams } from "react-router-dom";
 import UpdDelBtns from "./UpdDelBtns";
 
-const Comments = ({sendRequestToDb}) => {
+const Comments = ({ sendRequestToDb }) => {
   const [comments, setComments] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [changedComment, setChangedComment] = useState(false);
   const fetchData = useFetch;
-  const { postId } = useParams();
+  const { id, postId } = useParams();
 
   useEffect(() => {
     const fetchComments = async () => {
       try {
         setError(false);
         setIsLoading(true);
+        console.log(`http://localhost:3000/comment?post_id=${postId}`);
+        console.log(id);
         const data = await fetchData(
-          `http://localhost:3000/comments?postId=${postId}`
+          `http://localhost:3000/comment?post_id=${postId}`
         );
         if (!(data.length > 0)) throw new Error("not found");
         setComments(data);
@@ -28,28 +31,28 @@ const Comments = ({sendRequestToDb}) => {
     };
 
     fetchComments();
-  }, [fetchData, postId]);
+  }, [fetchData, postId, changedComment]);
 
   async function addComment() {
     const newCommentsObj = getAddCommentsContent();
     const responseComments = await sendRequestToDb(
       "POST",
-      `http://localhost:3000/comments/`,
+      `http://localhost:3000/comment/`,
       newCommentsObj
     );
 
     setComments((prevComments) => [...prevComments, responseComments]);
+    setChangedComment(!changedComment);
   }
 
   function getAddCommentsContent() {
     const commentName = prompt("please enter your comment name");
     const commentBody = prompt("please enter your comment body");
-    const commentEmail = prompt("please enter your comment email");
     const newComment = {
-      name: commentName,
+      title: commentName,
       body: commentBody,
-      email: commentEmail,
-      postId: postId,
+      post_id: postId,
+      user_id: id,
     };
     return newComment;
   }
@@ -59,16 +62,17 @@ const Comments = ({sendRequestToDb}) => {
       <div key={comment?.id}>
         <UpdDelBtns
           contentId={comment.id}
-          contentUrl={`http://localhost:3000/comments/${comment.id}`}
+          contentUrl={`http://localhost:3000/comment/${comment.id}`}
           setContent={setComments}
+          changedContent={changedComment}
+          setChangedContent={setChangedComment}
           getPostData={getAddCommentsContent}
           sendRequestToDb={sendRequestToDb}
         />
         <h4>body: {comment?.body}</h4>
-        <h4>email: {comment?.email}</h4>
         <h4>id: {comment?.id}</h4>
-        <h4>name: {comment?.name}</h4>
-        <h4>postId: {comment?.postId}</h4>
+        <h4>title: {comment?.title}</h4>
+        <h4>postId: {comment?.post_id}</h4>
       </div>
     );
   });

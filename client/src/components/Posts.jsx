@@ -21,12 +21,15 @@ const Posts = ({ showPost, setShowPost, sendRequestToDb }) => {
         setIsLoading(true);
         setError(false);
         let data;
+        console.log(
+          `http://localhost:3000/user/post?user_id=${id}${serchParams}`
+        );
         postId
           ? (data = await fetchData(
               `http://localhost:3000/post/${postId}?${serchParams}`
             ))
           : (data = await fetchData(
-              `http://localhost:3000/user/post?user_id=${id}${serchParams}`
+              `http://localhost:3000/post?user_id=${id}${serchParams}`
             ));
         if (!(data.length > 0)) throw new Error("not found");
         setPosts(data);
