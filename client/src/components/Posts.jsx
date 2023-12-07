@@ -9,6 +9,7 @@ const Posts = ({ showPost, setShowPost, sendRequestToDb }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
   const [serchParams, setSearchParams] = useState("");
+  const [changedPost, setChangedPost] = useState(false);
 
   const fetchData = useFetch;
   const { id, postId } = useParams();
@@ -16,7 +17,7 @@ const Posts = ({ showPost, setShowPost, sendRequestToDb }) => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        console.log("hi")
+        console.log("hi");
         setIsLoading(true);
         setError(false);
         let data;
@@ -25,7 +26,7 @@ const Posts = ({ showPost, setShowPost, sendRequestToDb }) => {
               `http://localhost:3000/post/${postId}?${serchParams}`
             ))
           : (data = await fetchData(
-              `http://localhost:3000/user/post?userId=${id}${serchParams}`
+              `http://localhost:3000/user/post?user_id=${id}${serchParams}`
             ));
         if (!(data.length > 0)) throw new Error("not found");
         setPosts(data);
@@ -37,7 +38,7 @@ const Posts = ({ showPost, setShowPost, sendRequestToDb }) => {
     };
 
     fetchPosts();
-  }, [showPost, fetchData, postId, id, serchParams]);
+  }, [showPost, fetchData, postId, id, serchParams, changedPost]);
 
   async function addPost() {
     const newPostObj = getAddPostContent();
@@ -48,6 +49,7 @@ const Posts = ({ showPost, setShowPost, sendRequestToDb }) => {
     );
 
     setPosts((prevPosts) => [...prevPosts, responsePost]);
+    setChangedPost(!changedPost);
   }
 
   function getAddPostContent() {
@@ -86,6 +88,8 @@ const Posts = ({ showPost, setShowPost, sendRequestToDb }) => {
             contentId={post.id}
             contentUrl={`http://localhost:3000/post/${post.id}`}
             setContent={setPosts}
+            setChangedContent={setChangedPost}
+            changedContent={changedPost}
             getPostData={getAddPostContent}
             sendRequestToDb={sendRequestToDb}
           />
@@ -93,7 +97,7 @@ const Posts = ({ showPost, setShowPost, sendRequestToDb }) => {
           <h4>title: {post?.title}</h4>
           {showPost && (
             <>
-              <h4>userId: {post?.userId}</h4>
+              <h4>userId: {post?.user_id}</h4>
               <h4>body: {post?.body}</h4>
               <button
                 onClick={() => {

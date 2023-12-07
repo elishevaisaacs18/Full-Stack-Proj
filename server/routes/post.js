@@ -22,7 +22,7 @@ router.get("/", async function (req, res) {
   }
 });
 
-router.put("/:id", async function (req, res) {
+router.patch("/:id", async function (req, res) {
   console.log("req.query.id: ", req.params.id);
   res.send(await updateItem("post", req.body, req.params.id));
 });

@@ -4,11 +4,12 @@ import { useParams } from "react-router-dom";
 import FilterNav from "./FilterNav";
 import UpdDelBtns from "./UpdDelBtns";
 
-const Todos = ({sendRequestToDb}) => {
+const Todos = ({ sendRequestToDb }) => {
   const [todos, setTodos] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
   const [serchParams, setSearchParams] = useState("");
+  const [changedTodo, setChangedTodo] = useState(false);
   const fetchData = useFetch;
   const { id } = useParams();
   const alphabet = "abcdefghijklmnopqrstuvwxyz".split("");
@@ -19,7 +20,7 @@ const Todos = ({sendRequestToDb}) => {
         setError(false);
         setIsLoading(true);
         const data = await fetchData(
-          `http://localhost:3000/todos?userId=${id}${serchParams}`
+          `http://localhost:3000/user/todo?user_id=${id}${serchParams}`
         );
         if (!(data.length > 0)) throw new Error("not found");
         setTodos(data);
@@ -30,31 +31,32 @@ const Todos = ({sendRequestToDb}) => {
       }
     };
     fetchTodos();
-  }, [fetchData, id, serchParams]);
+  }, [fetchData, id, serchParams, changedTodo]);
 
   async function addToDo() {
     const newToDoObj = getAddToDoContent();
     const responseToDo = await sendRequestToDb(
       "POST",
-      `http://localhost:3000/todos/`,
+      `http://localhost:3000/todo/`,
       newToDoObj
     );
 
     setTodos((prevToDos) => [...prevToDos, responseToDo]);
+    setChangedPost(!changedPost);
   }
 
   function getAddToDoContent() {
     const ToDoTitle = prompt("please enter your todo title");
     const newToDo = {
       title: ToDoTitle,
-      userId: id,
+      user_id: id,
     };
     return newToDo;
   }
 
   function updateTodosDb(e, id) {
     const currValue = e.target.checked;
-    sendRequestToDb("PATCH", `http://localhost:3000/todos/${id}`, {
+    sendRequestToDb("PATCH", `http://localhost:3000/todo/${id}`, {
       completed: currValue,
     });
   }
@@ -126,8 +128,10 @@ const Todos = ({sendRequestToDb}) => {
     <div key={todo.id}>
       <UpdDelBtns
         contentId={todo.id}
-        contentUrl={`http://localhost:3000/todos/${todo.id}`}
+        contentUrl={`http://localhost:3000/todo/${todo.id}`}
         setContent={setTodos}
+        changedContent={changedTodo}
+        setChangedContent={setChangedTodo}
         getPostData={getAddToDoContent}
         sendRequestToDb={sendRequestToDb}
       />

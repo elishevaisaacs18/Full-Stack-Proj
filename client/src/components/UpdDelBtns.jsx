@@ -6,6 +6,8 @@ const UpdDelBtns = ({
   setContent,
   getPostData,
   sendRequestToDb,
+  setChangedContent,
+  changedContent
 }) => {
   const fetchData = useFetch;
 
@@ -16,17 +18,19 @@ const UpdDelBtns = ({
     setContent((prev) => {
       return prev.filter((content) => content.id !== contentId);
     });
+    setChangedContent(!changedContent)
   }
 
   async function changeContent() {
     const newContentObj = getPostData();
     try {
-      const response = await sendRequestToDb("PUT", contentUrl, newContentObj);
+      const response = await sendRequestToDb("PATCH", contentUrl, newContentObj);
       setContent((prev) => {
         return prev.map((post) =>
           post.id === response.id ? { ...post, ...response } : post
         );
       });
+      setChangedContent(!changedContent)
     } catch (error) {
       console.error("Error updating content:", error);
     }
