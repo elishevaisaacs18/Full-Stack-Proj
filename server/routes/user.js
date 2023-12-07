@@ -106,9 +106,6 @@ router.post("/login", async function (req, res) {
       });
     }, 10000);
   }
-
-  console.log(loginTable);
-
   // res.send(user);
   res.send({ user: user, access_token: access_token });
 

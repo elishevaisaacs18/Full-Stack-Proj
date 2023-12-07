@@ -44,7 +44,7 @@ const Posts = ({ showPost, setShowPost, sendRequestToDb }) => {
     const responsePost = await sendRequestToDb(
       "POST",
       `http://localhost:3000/post/`,
-      newPostObj
+      newPostObj,
     );
 
     setPosts((prevPosts) => [...prevPosts, responsePost]);

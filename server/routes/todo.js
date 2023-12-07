@@ -23,7 +23,6 @@ router.patch("/:id", async function (req, res) {
 });
 
 router.get("/", async function (req, res) {
-  console.log("loginTable: jfjhfhj", loginTable);
 
   const conditions = req.query; // Assuming you're looking for a query parameter named "type"
   if (JSON.stringify(conditions) === "{}") {

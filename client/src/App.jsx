@@ -18,6 +18,7 @@ const App = () => {
     const response = await fetchData(url, {
       method: requestType,
       headers: {
+        "Authorization": `${localStorage.getItem("access_token")}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(body),
@@ -39,15 +40,27 @@ const App = () => {
             <Route path="info/" element={<Info />} />
             <Route
               path="posts/"
-              element={<Posts showPost={showPost} setShowPost={setShowPost} sendRequestToDb={sendRequestToDb} />}
+              element={
+                <Posts
+                  showPost={showPost}
+                  setShowPost={setShowPost}
+                  sendRequestToDb={sendRequestToDb}
+                />
+              }
             />
             <Route
               path="posts/:postId"
               element={<Posts showPost={showPost} setShowPost={setShowPost} />}
             >
-              <Route path="comments" element={<Comments sendRequestToDb={sendRequestToDb} />} />
+              <Route
+                path="comments"
+                element={<Comments sendRequestToDb={sendRequestToDb} />}
+              />
             </Route>
-            <Route path="todos/" element={<Todos sendRequestToDb={sendRequestToDb}/>} />
+            <Route
+              path="todos/"
+              element={<Todos sendRequestToDb={sendRequestToDb} />}
+            />
           </Route>
         </Route>
         <Route path="*" element={<NotFound />} />
