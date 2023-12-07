@@ -19,10 +19,12 @@ function Login({ sendRequestToDb }) {
   async function handleSubmit(e) {
     e.preventDefault();
     const data = await tryConnection();
-    if (data.length > 0) {
+    console.log("data: ", data);
+    if (data.access_token !== 0) {
       setIncorrect(false);
-      localStorage.setItem("currentUser", data[0].id);
-      navigate(`/home/${data[0].id}`);
+      localStorage.setItem("currentUser", data.user[0].id);
+      localStorage.setItem("access_token", data.access_token);
+      navigate(`/home/${data.user[0].id}`);
     } else {
       setIncorrect(true);
     }

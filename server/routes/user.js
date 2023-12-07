@@ -63,14 +63,10 @@ router.post("/login", async function (req, res) {
     return;
   }
   const user = await loginUser(req.body);
-  // loginTable.push(5);
-  // console.log(loginTable);
   if (user[0].user_name) {
-    // console.log("god");
     if (!userHistory[0]) {
       loginTable.push({
         user_name: user[0].user_name,
-        // access_token: Math.random(),
       });
     }
     loginTable.forEach((uh) => {
@@ -95,7 +91,6 @@ router.post("/login", async function (req, res) {
         wrongPassword: [],
       });
     }
-    // console.log(8888);
     loginTable.forEach((uh) => {
       if (uh.user_name === req.body.user_name) {
         uh.wrongPassword.push(1);
@@ -114,10 +109,9 @@ router.post("/login", async function (req, res) {
 
   console.log(loginTable);
 
-  res.send(user);
-  // res.send({ user: user, access_token: access_token });
+  // res.send(user);
+  res.send({ user: user, access_token: access_token });
 
-  // console.log("hii");
 });
 
 module.exports = router;
