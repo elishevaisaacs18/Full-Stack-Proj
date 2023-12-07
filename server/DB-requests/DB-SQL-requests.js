@@ -75,7 +75,6 @@ const updateItemByAttributeInDB = async (tableName, updateItem, id) => {
 };
 
 const getFilterItemsFromDB = async (tableName, conditionsObj) => {
-  // console.log("conditionsObj: ", conditionsObj);
   let conditionsSql = "";
   const conditions = Object.keys(conditionsObj);
   const length = conditions.length;
@@ -89,15 +88,38 @@ const getFilterItemsFromDB = async (tableName, conditionsObj) => {
       conditionsSql += " AND ";
     }
   });
-  // console.log(
-  //   "` SELECT *FROM ${tableName} WHERE ${conditionsSql}`: ",
-  //   ` SELECT *FROM ${tableName} WHERE ${conditionsSql}`
-  // );
   const res = await executeQuery(
     ` SELECT *FROM ${tableName} WHERE ${conditionsSql}`
   );
   console.log("res: ", res);
   return res;
+};
+
+const getSortedItemsFromDB = async (tableName, conditions) => {
+  let data;
+  switch (conditions._sort) {
+    case "id":
+    case "title":
+      data = await executeQuery(
+        `SELECT * FROM ${tableName}  WHERE user_id = ${conditions.user_id} ORDER BY ${conditions._sort}`
+      )
+      break;
+    case "completed":
+      data = await executeQuery(
+        `SELECT * FROM ${tableName} WHERE user_id = ${conditions.user_id} ORDER BY ${conditions._sort} DESC`
+      );
+      break;
+    case "random":
+      data = await executeQuery(
+        `SELECT * FROM ${tableName} WHERE user_id = ${conditions.user_id} ORDER BY RAND()`
+      );
+      break;
+    default:
+      data = "cannot sort items";
+      break;
+  }
+
+  return data;
 };
 
 module.exports = {
@@ -108,4 +130,5 @@ module.exports = {
   loginUserInDB,
   updateItemByAttributeInDB,
   getFilterItemsFromDB,
+  getSortedItemsFromDB,
 };

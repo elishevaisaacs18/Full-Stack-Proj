@@ -67,68 +67,96 @@ const Todos = ({ sendRequestToDb }) => {
     });
   }
 
-  function sortById() {
-    setTodos((prev) => {
-      return [...prev].sort((a, b) => {
-        if (a.id < b.id) {
-          return -1;
-        } else if (a.id > b.id) {
-          return 1;
-        } else {
-          return 0;
-        }
-      });
-    });
+  async function sortById() {
+    const data = await fetchData(
+      `http://localhost:3000/todo?user_id=${id}&_sort=id`
+    );
+    setTodos(data);
   }
 
-  function sortByCompleted() {
-    setTodos((prev) => {
-      return [...prev].sort((a, b) => {
-        if (a.completed && !b.completed) {
-          return -1;
-        } else if (!a.completed && b.completed) {
-          return 1;
-        } else {
-          return 0;
-        }
-      });
-    });
+  async function sortByCompleted() {
+    const data = await fetchData(
+      `http://localhost:3000/todo?user_id=${id}&_sort=completed`
+    );
+    setTodos(data);
   }
 
-  function sortByAlpha() {
-    setTodos((prev) => {
-      return [...prev].sort((a, b) => {
-        if (
-          alphabet.indexOf(a.title[0].toLowerCase()) <
-          alphabet.indexOf(b.title[0].toLowerCase())
-        ) {
-          return -1;
-        } else if (
-          alphabet.indexOf(a.title[0].toLowerCase()) >
-          alphabet.indexOf(b.title[0].toLowerCase())
-        ) {
-          return 1;
-        } else {
-          return 0;
-        }
-      });
-    });
+  async function sortByAlpha() {
+    const data = await fetchData(
+      `http://localhost:3000/todo?user_id=${id}&_sort=title`
+    );
+    setTodos(data);
   }
 
-  function sortByRandom() {
-    const randomArr = todos.map(() => Math.floor(Math.random() * todos.length));
-    setTodos((prev) => {
-      return [...prev].sort((a, b) => {
-        if (randomArr[prev.indexOf(a)] < randomArr[prev.indexOf(b)]) {
-          return -1;
-        } else if (randomArr[prev.indexOf(a)] > randomArr[prev.indexOf(b)]) {
-          return 1;
-        } else {
-          return 0;
-        }
-      });
-    });
+  async function sortByRandom() {
+    const data = await fetchData(
+      `http://localhost:3000/todo?user_id=${id}&_sort=random`
+    );
+    setTodos(data);
   }
+
+  // function sortById() {
+  //   setTodos((prev) => {
+  //     return [...prev].sort((a, b) => {
+  //       if (a.id < b.id) {
+  //         return -1;
+  //       } else if (a.id > b.id) {
+  //         return 1;
+  //       } else {
+  //         return 0;
+  //       }
+  //     });
+  //   });
+  // }
+
+  // function sortByCompleted() {
+  //   setTodos((prev) => {
+  //     return [...prev].sort((a, b) => {
+  //       if (a.completed && !b.completed) {
+  //         return -1;
+  //       } else if (!a.completed && b.completed) {
+  //         return 1;
+  //       } else {
+  //         return 0;
+  //       }
+  //     });
+  //   });
+  // }
+
+  // function sortByAlpha() {
+  //   setTodos((prev) => {
+  //     return [...prev].sort((a, b) => {
+  //       if (
+  //         alphabet.indexOf(a.title[0].toLowerCase()) <
+  //         alphabet.indexOf(b.title[0].toLowerCase())
+  //       ) {
+  //         return -1;
+  //       } else if (
+  //         alphabet.indexOf(a.title[0].toLowerCase()) >
+  //         alphabet.indexOf(b.title[0].toLowerCase())
+  //       ) {
+  //         return 1;
+  //       } else {
+  //         return 0;
+  //       }
+  //     });
+  //   });
+  // }
+
+  // function sortByRandom() {
+  //   const randomArr = todos.map(() => Math.floor(Math.random() * todos.length));
+  //   setTodos((prev) => {
+  //     return [...prev].sort((a, b) => {
+  //       if (randomArr[prev.indexOf(a)] < randomArr[prev.indexOf(b)]) {
+  //         return -1;
+  //       } else if (randomArr[prev.indexOf(a)] > randomArr[prev.indexOf(b)]) {
+  //         return 1;
+  //       } else {
+  //         return 0;
+  //       }
+  //     });
+  //   });
+  // }
 
   const todosDisplay = todos.map((todo) => (
     <div key={todo.id}>

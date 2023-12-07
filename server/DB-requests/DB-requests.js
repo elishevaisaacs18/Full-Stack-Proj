@@ -6,6 +6,7 @@ const {
   loginUserInDB,
   updateItemByAttributeInDB,
   getFilterItemsFromDB,
+  getSortedItemsFromDB,
 } = require("./DB-SQL-requests");
 
 const getAllItems = async (tableName) => {
@@ -77,7 +78,16 @@ const getFilterItems = async (tableName, conditions) => {
   }
 };
 
+const getSortedItems = async (tableName, conditions) => {
+  try {
+    return await getSortedItemsFromDB(tableName, conditions);
+  } catch (e) {
+    return e.message;
+  }
+};
+
 module.exports = {
+  getSortedItems,
   getAllItems,
   getItemByAttribute,
   deleteItem,
