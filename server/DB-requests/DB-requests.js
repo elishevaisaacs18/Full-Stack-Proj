@@ -12,7 +12,6 @@ const {
 const getAllItems = async (tableName) => {
   try {
     const res = await getAllItemsFromDB(tableName);
-    console.log("res: ", res);
     return res;
   } catch {
     return "Error Getting Items";

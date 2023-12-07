@@ -13,9 +13,7 @@ var router = express.Router();
 
 router.get("/", async function (req, res) {
   const conditions = req.query; // Assuming you're looking for a query parameter named "type"
-  console.log("conditions11: ", conditions);
   if (JSON.stringify(conditions) === "{}") {
-    console.log("ressdfaw1");
     res.send(await getAllItems("post"));
   } else {
     res.send(await getFilterItems("post", conditions));
@@ -23,7 +21,6 @@ router.get("/", async function (req, res) {
 });
 
 router.patch("/:id", async function (req, res) {
-  console.log("req.query.id: ", req.params.id);
   res.send(await updateItem("post", req.body, req.params.id));
 });
 
@@ -34,7 +31,6 @@ const schema = Joi.object({
 });
 router.get("/:id", async function (req, res) {
   const postId = req.params.id;
-  console.log("postId: ", postId);
   res.send(await getItemByAttribute("post", postId, "id"));
 });
 

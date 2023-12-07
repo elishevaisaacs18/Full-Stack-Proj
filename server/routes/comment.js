@@ -1,6 +1,5 @@
 const express = require("express");
 const Joi = require("joi");
-const executeQuery = require("../../DB/dbUtils").executeQuery;
 const {
   getAllItems,
   deleteItem,
@@ -19,15 +18,12 @@ const schema = Joi.object({
 });
 
 router.patch("/:id", async function (req, res) {
-  console.log("res.body: ", req.body);
   res.send(await updateItem("comment", req.body, req.params.id));
 });
 
 router.get("/", async function (req, res) {
   const conditions = req.query; // Assuming you're looking for a query parameter named "type"
-  console.log("conditions11: ", conditions);
   if (JSON.stringify(conditions) === "{}") {
-    console.log("ressdfaw1");
     res.send(await getAllItems("comment"));
   } else {
     res.send(await getFilterItems("comment", conditions));
@@ -35,7 +31,6 @@ router.get("/", async function (req, res) {
 });
 
 router.post("/", async function (req, res) {
-  console.log("req.bod: ", req.body);
   const { error } = schema.validate(req.body);
   if (error) {
     console.log(error);

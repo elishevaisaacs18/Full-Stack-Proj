@@ -38,7 +38,6 @@ function UserProvider({ children }) {
       setUser((prev) => {
         return { ...prev, ...newUser };
       });
-      console.log("newUser: ", newUser);
     } catch (error) {
       console.error("Error setting user in local storage:", error);
       // Handle the error accordingly, e.g., show a user-friendly message to the user.

@@ -5,9 +5,7 @@ const {
   getItemByAttribute,
   deleteItem,
   loginUser,
-  getUserPosts,
 } = require("../DB-requests/DB-requests");
-const { getItemByAttributeFromDB } = require("../DB-requests/DB-SQL-requests");
 var router = express.Router();
 const { loginTable } = require("../userAccess");
 

@@ -11,7 +11,6 @@ const Info = () => {
     const fetchInfo = async () => {
       try {
         const data = await fetchData(`http://localhost:3000/user/${id}`);
-        console.log("data: ", data);
         setInfo(data);
       } catch (error) {
         console.error("Error fetching data:", error);
