@@ -1,23 +1,9 @@
 const { query } = require("express");
-// const { getItemByAttribute } = require("./DB-requests");
-
 const executeQuery = require("../../DB/dbUtils").executeQuery;
-
-const getItemByAttributeFromDB = async (tableName, id, attribute) => {
-  console.log(
-    "`SELECT * FROM ${tableName} WHERE ${attribute}=${id}`: ",
-    `SELECT * FROM ${tableName} WHERE ${attribute}=${id};`
-  );
-  return await executeQuery(
-    `SELECT * FROM ${tableName} WHERE ${attribute}=${id};`
-  );
-};
-
-const getAllItemsFromDB = async (tableName) => {
-  console.log("`SELECT * FROM ${tableName}`: ", `SELECT * FROM ${tableName}`);
-  return await executeQuery(`SELECT * FROM full_stack_proj.${tableName}`);
-};
-
+const getItemByAttributeFromDB = async (tableName, id, attribute) =>
+  await executeQuery(`SELECT * FROM ${tableName} WHERE ${attribute}=${id};`);
+const getAllItemsFromDB = async (tableName) =>
+  await executeQuery(`SELECT * FROM full_stack_proj.${tableName}`);
 const deleteItemFromDB = async (tableName, id) =>
   await executeQuery(`DELETE FROM ${tableName} WHERE id = ${id};`);
 
@@ -91,7 +77,6 @@ const getFilterItemsFromDB = async (tableName, conditionsObj) => {
   const res = await executeQuery(
     ` SELECT *FROM ${tableName} WHERE ${conditionsSql}`
   );
-  console.log("res: ", res);
   return res;
 };
 
@@ -102,7 +87,7 @@ const getSortedItemsFromDB = async (tableName, conditions) => {
     case "title":
       data = await executeQuery(
         `SELECT * FROM ${tableName}  WHERE user_id = ${conditions.user_id} ORDER BY ${conditions._sort}`
-      )
+      );
       break;
     case "completed":
       data = await executeQuery(

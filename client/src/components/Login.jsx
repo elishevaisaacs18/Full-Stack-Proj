@@ -13,7 +13,6 @@ function Login({ sendRequestToDb }) {
       `http://localhost:3000/user/login`,
       { user_name: username, password: password }
     );
-    console.log("data: ", data);
     return data;
   }
 

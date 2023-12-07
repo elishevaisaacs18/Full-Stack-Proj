@@ -2,7 +2,6 @@ const express = require("express");
 const Joi = require("joi");
 const {
   getAllItems,
-  getItemByAttribute,
   deleteItem,
   getFilterItems,
   updateItem,
@@ -25,7 +24,6 @@ router.patch("/:id", async function (req, res) {
 router.get("/", async function (req, res) {
   const conditions = req.query; // Assuming you're looking for a query parameter named "type"
   if (JSON.stringify(conditions) === "{}") {
-    console.log("ressdfaw1");
     res.send(await getAllItems("todo"));
   } else if (Object.keys(conditions)[1] === "_sort") {
     res.send(await getSortedItems("todo", conditions));

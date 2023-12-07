@@ -17,13 +17,9 @@ const Posts = ({ showPost, setShowPost, sendRequestToDb }) => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        console.log("hi");
         setIsLoading(true);
         setError(false);
         let data;
-        console.log(
-          `http://localhost:3000/user/post?user_id=${id}${serchParams}`
-        );
         postId
           ? (data = await fetchData(
               `http://localhost:3000/post/${postId}?${serchParams}`

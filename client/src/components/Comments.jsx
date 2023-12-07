@@ -16,8 +16,6 @@ const Comments = ({ sendRequestToDb }) => {
       try {
         setError(false);
         setIsLoading(true);
-        console.log(`http://localhost:3000/comment?post_id=${postId}`);
-        console.log(id);
         const data = await fetchData(
           `http://localhost:3000/comment?post_id=${postId}`
         );
