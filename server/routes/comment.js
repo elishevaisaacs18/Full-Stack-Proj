@@ -20,7 +20,7 @@ const schema = Joi.object({
 
 router.patch("/:id", async function (req, res) {
   console.log("res.body: ", req.body);
-  res.send(await updateItem("comment", req.body));
+  res.send(await updateItem("comment", req.body, req.params.id));
 });
 
 router.get("/", async function (req, res) {
@@ -33,10 +33,6 @@ router.get("/", async function (req, res) {
     res.send(await getFilterItems("comment", conditions));
   }
 });
-
-// router.get("/", async function (req, res) {
-//   res.send(await getAllItems("comment"));
-// });
 
 router.post("/", async function (req, res) {
   console.log("req.bod: ", req.body);

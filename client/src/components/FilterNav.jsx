@@ -11,7 +11,7 @@ const FilterNav = ({ setSearchParams, todos }) => {
 
   function handleSearchParams() {
     if (filterOn === "completed") {
-      if (filteredValue !== "false" && filteredValue !== "true") {
+      if (filteredValue !== "1" && filteredValue !== "0") {
         setFilteredValue("");
         setSearchParams("");
         return;

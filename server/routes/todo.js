@@ -6,6 +6,7 @@ const {
   deleteItem,
   getFilterItems,
   updateItem,
+  postItem,
 } = require("../DB-requests/DB-requests");
 
 var router = express.Router();

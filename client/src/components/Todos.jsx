@@ -19,8 +19,13 @@ const Todos = ({ sendRequestToDb }) => {
       try {
         setError(false);
         setIsLoading(true);
+        console.log(
+          " `http://localhost:3000/todo?user_id=${id}${serchParams}`: ",
+          `http://localhost:3000/todo?user_id=${id}${serchParams}`
+        );
+
         const data = await fetchData(
-          `http://localhost:3000/user/todo?user_id=${id}${serchParams}`
+          `http://localhost:3000/todo?user_id=${id}${serchParams}`
         );
         if (!(data.length > 0)) throw new Error("not found");
         setTodos(data);
@@ -37,12 +42,12 @@ const Todos = ({ sendRequestToDb }) => {
     const newToDoObj = getAddToDoContent();
     const responseToDo = await sendRequestToDb(
       "POST",
-      `http://localhost:3000/todo/`,
+      `http://localhost:3000/todo`,
       newToDoObj
     );
 
     setTodos((prevToDos) => [...prevToDos, responseToDo]);
-    setChangedPost(!changedPost);
+    setChangedTodo(!changedTodo);
   }
 
   function getAddToDoContent() {
@@ -50,6 +55,7 @@ const Todos = ({ sendRequestToDb }) => {
     const newToDo = {
       title: ToDoTitle,
       user_id: id,
+      completed: 0,
     };
     return newToDo;
   }
