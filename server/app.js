@@ -44,21 +44,22 @@ app.use((req, res, next) => {
   if (req.path === "/user/login") {
     next();
     return;
-  } else if (req.headers.authorization == userHistory[0]?.access_token) {
-    const userHistory = loginTable.filter((uh) => {
-      return uh.id == req.body.user_id;
-    });
-    console.log("userHistory", userHistory);
-    console.log("key", req.headers.authorization);
-    console.log(
-      "worth? ",
-      req.headers.authorization == userHistory[0]?.access_token
-    );
-
-    next();
-  } else {
-    //error
   }
+  // else if (req.headers.authorization == userHistory[0]?.access_token) {
+  const userHistory = loginTable.filter((uh) => {
+    return uh.id == req.body.user_id;
+  });
+  console.log("userHistory", userHistory);
+  console.log("key", req.headers.authorization);
+  console.log(
+    "worth? ",
+    req.headers.authorization == userHistory[0]?.access_token
+  );
+
+  next();
+  // } else {
+  //   //error
+  // }
 });
 
 app.use("/user", userRouter);
